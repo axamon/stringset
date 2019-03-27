@@ -2,14 +2,27 @@ package stringset
 
 import (
 	"fmt"
-	"reflect"
-	"sync"
-	"testing"
 )
 
-func ExampleStrings() {
+func ExampleDelete() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 
+	testSet.Delete("pluto")
+	testSet.Delete("nonna papera")
+	for _, element := range testSet.Strings() {
+		fmt.Println(element)
+	}
+	// Output:
+	// pippo
+	// paperino
+
+}
+
+func Example_Add() {
+	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+
+	testSet.Add("pluto")
+	testSet.Add("nonna papera")
 	for _, element := range testSet.Strings() {
 		fmt.Println(element)
 	}
@@ -17,53 +30,34 @@ func ExampleStrings() {
 	// pippo
 	// pluto
 	// paperino
+	// nonna papera
 
 }
 
-func TestStringSet_Delete(t *testing.T) {
-	type fields struct {
-		m    map[string]struct{}
-		lock sync.RWMutex
-	}
-	type args struct {
-		str string
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-	}{
-		// TODO: Add test cases.
-		{"topolino", fields{}, args{"topolino"}},
-	}
+func Example_Exists() {
+	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := &StringSet{
-				m:    tt.fields.m,
-				lock: tt.fields.lock,
-			}
-			s.Delete(tt.args.str)
-		})
+	element := "pippo"
+	if ok := testSet.Exists(element); ok {
+		fmt.Printf("%s exists", element)
 	}
+	// Output:
+	// pippo exists
 }
 
-func TestNewStringSet(t *testing.T) {
-	type args struct {
-		strings []string
+func ExampleStrings() {
+	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+
+	for _, element := range testSet.Strings() {
+		fmt.Println(element)
 	}
-	tests := []struct {
-		name string
-		args args
-		want *StringSet
-	}{
-		// TODO: Add test cases.
+	testSet = NewStringSet()
+	for _, element := range testSet.Strings() {
+		fmt.Println(element)
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := NewStringSet(tt.args.strings...); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewStringSet() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+	// Output:
+	// pippo
+	// pluto
+	// paperino
+	//
 }
