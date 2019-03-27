@@ -1,6 +1,7 @@
 package stringset
 
 import (
+	"reflect"
 	"sync"
 	"testing"
 )
@@ -29,6 +30,26 @@ func TestStringSet_Delete(t *testing.T) {
 				lock: tt.fields.lock,
 			}
 			s.Delete(tt.args.str)
+		})
+	}
+}
+
+func TestNewStringSet(t *testing.T) {
+	type args struct {
+		strings []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want *StringSet
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewStringSet(tt.args.strings...); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewStringSet() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
