@@ -8,14 +8,12 @@ func ExampleDelete() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	testSet.Delete("pluto")
-	testSet.Delete("nonna papera")
 	for _, element := range testSet.Strings() {
 		fmt.Println(element)
 	}
 	// Output:
 	// pippo
 	// paperino
-
 }
 
 func Example_Add() {
@@ -51,13 +49,17 @@ func ExampleStrings() {
 	for _, element := range testSet.Strings() {
 		fmt.Println(element)
 	}
-	testSet = NewStringSet()
-	for _, element := range testSet.Strings() {
-		fmt.Println(element)
-	}
 	// Output:
 	// pippo
 	// pluto
 	// paperino
+}
+
+func ExampleStrings_2() {
+	testSet := NewStringSet()
+	for _, element := range testSet.Strings() {
+		fmt.Println(element)
+	}
+	// Output:
 	//
 }

@@ -1,0 +1,25 @@
+
+mode: set
+github.com/axamon/stringset/stringset.go:17.49,21.28 2 1
+github.com/axamon/stringset/stringset.go:24.2,24.12 1 1
+github.com/axamon/stringset/stringset.go:21.28,23.3 1 1
+github.com/axamon/stringset/stringset.go:29.37,33.2 3 1
+github.com/axamon/stringset/stringset.go:36.45,41.2 4 1
+github.com/axamon/stringset/stringset.go:44.40,48.2 3 1
+github.com/axamon/stringset/stringset.go:51.40,55.12 4 1
+github.com/axamon/stringset/stringset.go:60.2,62.23 3 1
+github.com/axamon/stringset/stringset.go:65.2,66.12 2 1
+github.com/axamon/stringset/stringset.go:55.12,57.3 1 1
+github.com/axamon/stringset/stringset.go:62.23,64.3 1 1
+mode: set
+github.com/axamon/stringset/examples/01/main.go:13.13,27.2 7 0
+github.com/axamon/stringset/examples/01/main.go:29.50,32.28 2 0
+github.com/axamon/stringset/examples/01/main.go:40.2,41.8 2 0
+github.com/axamon/stringset/examples/01/main.go:32.28,35.13 3 0
+github.com/axamon/stringset/examples/01/main.go:35.13,38.4 2 0
+github.com/axamon/stringset/examples/01/main.go:44.51,47.28 2 0
+github.com/axamon/stringset/examples/01/main.go:60.2,61.8 2 0
+github.com/axamon/stringset/examples/01/main.go:47.28,50.13 3 0
+github.com/axamon/stringset/examples/01/main.go:54.3,55.13 2 0
+github.com/axamon/stringset/examples/01/main.go:50.13,53.4 2 0
+github.com/axamon/stringset/examples/01/main.go:55.13,58.4 2 0
