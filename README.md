@@ -7,6 +7,6 @@ creates sets for strings in golang that are concurrency safe
 
 
 # Installation
-'''go get -u github.com/axamon/stringset'''
+go get -u github.com/axamon/stringset
 
 
