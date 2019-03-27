@@ -1,10 +1,24 @@
 package stringset
 
 import (
+	"fmt"
 	"reflect"
 	"sync"
 	"testing"
 )
+
+func ExampleStrings() {
+	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+
+	for _, element := range testSet.Strings() {
+		fmt.Println(element)
+	}
+	// Output:
+	// pippo
+	// pluto
+	// paperino
+
+}
 
 func TestStringSet_Delete(t *testing.T) {
 	type fields struct {

@@ -23,9 +23,15 @@ import (
 func main() {
     testSet := stringset.NewStringSet("pippo", "pluto", "paperino","pippo")
 
-    fmt.Println(testSet.Strings())
+    for _, element := range testSet.Strings() {
+		fmt.Println(element)
+	}
 
 }
+    // Output:
+	// pippo
+	// pluto
+	// paperino
 ```
 
 
