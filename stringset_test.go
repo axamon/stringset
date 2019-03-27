@@ -2,18 +2,21 @@ package stringset
 
 import (
 	"fmt"
+	"sort"
 )
 
 func ExampleDelete() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	testSet.Delete("pluto")
-	for _, element := range testSet.Strings() {
+	slice := testSet.Strings()
+	sort.Strings(slice)
+	for _, element := range slice {
 		fmt.Println(element)
 	}
 	// Output:
-	// pippo
 	// paperino
+	// pippo
 }
 
 func Example_Add() {
@@ -21,14 +24,16 @@ func Example_Add() {
 
 	testSet.Add("pluto")
 	testSet.Add("nonna papera")
-	for _, element := range testSet.Strings() {
+	slice := testSet.Strings()
+	sort.Strings(slice)
+	for _, element := range slice {
 		fmt.Println(element)
 	}
 	// Output:
+	// nonna papera
+	// paperino
 	// pippo
 	// pluto
-	// paperino
-	// nonna papera
 }
 
 func Example_Exists() {
@@ -44,14 +49,15 @@ func Example_Exists() {
 
 func ExampleStrings() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
-
-	for _, element := range testSet.Strings() {
+	slice := testSet.Strings()
+	sort.Strings(slice)
+	for _, element := range slice {
 		fmt.Println(element)
 	}
 	// Output:
+	// paperino
 	// pippo
 	// pluto
-	// paperino
 }
 
 func ExampleStrings_2() {
