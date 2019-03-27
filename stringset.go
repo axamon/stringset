@@ -1,17 +1,19 @@
+// Package stringset allows the creation of sets for strings
+// that are concurrecy safe.
 package stringset
 
 import (
 	"sync"
 )
 
-// StringSet is a set of unique strings
-// lock allows to solve concurrency issues
+// StringSet is a set of unique strings.
+// The lock sync.RWMutex allows to solve concurrency issues
 type StringSet struct {
 	m    map[string]struct{}
 	lock sync.RWMutex
 }
 
-// NewStringSet creates a new set for strings
+// NewStringSet creates a new set for strings.
 func NewStringSet(strings ...string) *StringSet {
 	res := &StringSet{
 		m: map[string]struct{}{},
@@ -22,14 +24,15 @@ func NewStringSet(strings ...string) *StringSet {
 	return res
 }
 
-// Add adds a string to the set. If string is already in the set, it has no effect
+// Add adds a string to the set.
+// If string is already in the set, it has no effect.
 func (s *StringSet) Add(str string) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	s.m[str] = struct{}{}
 }
 
-// Exists checks if string exists in the set
+// Exists checks if string exists in the set.
 func (s *StringSet) Exists(str string) bool {
 	s.lock.Lock()
 	defer s.lock.Unlock()
@@ -37,14 +40,14 @@ func (s *StringSet) Exists(str string) bool {
 	return exists
 }
 
-// Delete removes a string from the set
+// Delete removes a string from the set.
 func (s *StringSet) Delete(str string) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	delete(s.m, str)
 }
 
-// Strings returns strings in the set
+// Strings returns a slice of strings in the set.
 func (s *StringSet) Strings() []string {
 	s.lock.Lock()
 	n := len(s.m)
