@@ -23,17 +23,18 @@ import (
 )
 
 func main() {
-    testSet := stringset.NewStringSet("pippo", "pluto", "paperino","pippo")
-
-    for _, element := range testSet.Strings() {
+    testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+      
+	slice := testSet.Strings()
+	sort.Strings(slice)
+	for _, element := range slice {
 		fmt.Println(element)
 	}
-
-}
-    // Output:
+	// Output:
+	// paperino
 	// pippo
 	// pluto
-	// paperino
+}
 ```
 
 
