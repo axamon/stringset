@@ -1,6 +1,7 @@
 # stringset
 
 [![GoDoc](https://godoc.org/github.com/axamon/stringset?status.svg)](https://godoc.org/github.com/axamon/stringset)
+[![Build Status](https://travis-ci.org/axamon/stringset.svg?branch=master)](https://travis-ci.org/axamon/stringset)
 
 
 stringset creates sets for strings in golang that are concurrency safe
