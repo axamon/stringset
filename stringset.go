@@ -85,9 +85,22 @@ func (s *StringSet) Union(other *StringSet) bool {
 }
 
 // Len returns the number of items in the set.
+// Cannot be used in for loops.
 func (s *StringSet) Len() int {
 	s.lock.Lock()
 	n := len(s.m)
 	s.lock.Unlock()
 	return n
+}
+
+// Pop removes and returns an arbitrary element from the set and removes it from the
+// set. If the set was empty, this returns ("", false).
+func (s *StringSet) Pop() (k string, ok bool) {
+	if s.Len() != 0 {
+		for _, k = range s.Strings() {
+			s.Delete(k) // deletes only one value from the set and than exits
+			return k, true
+		}
+	}
+	return "", false
 }
