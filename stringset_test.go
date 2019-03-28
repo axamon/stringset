@@ -160,3 +160,19 @@ func Example_stringset_Intersect() {
 	// paperino
 	// pluto
 }
+
+func Example_stringset_Intersect_2() {
+	testSet := NewStringSet("paperino", "pluto", "nonna papera")
+	testSet2 := NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
+
+	inersect := testSet.Intersect(testSet2)
+
+	list := inersect.Strings()
+
+	for _, element := range list {
+		fmt.Println(element)
+	}
+	// Unordered output:
+	// paperino
+	// pluto
+}
