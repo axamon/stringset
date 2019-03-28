@@ -68,22 +68,32 @@ func (s *StringSet) Strings() []string {
 
 // Contains returns true if the given set contains all elements from the other set.
 func (s *StringSet) Contains(other *StringSet) bool {
-	for _, k := range other.Strings() {
-		if !s.Exists(k) {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+	other.lock.Lock()
+	defer other.lock.Unlock()
+	for str := range other.m {
+		if _, exists := s.m[str]; !exists {
 			return false
 		}
 	}
 	return true
 }
 
-// Union returns a new set with contains all elements of the previous ones.
-func (s *StringSet) Union(other *StringSet) (union *StringSet) {
-	otherlist := other.Strings()
-	union = s
-	for _, k := range otherlist {
-		union.Add(k)
+// Union returns a new set which contains all elements of the previous ones.
+func (s *StringSet) Union(other *StringSet) (union StringSet) {
+
+	other.lock.Lock()
+	defer other.lock.Unlock()
+
+	for str := range other.m {
+		s.lock.Lock()
+		s.m[str] = struct{}{}
+		s.lock.Unlock()
 	}
-	return union
+	union.m = s.m
+
+	return
 }
 
 // Len returns the number of items in the set.
@@ -99,8 +109,11 @@ func (s *StringSet) Len() int {
 // set. If the set was empty, this returns ("", false).
 func (s *StringSet) Pop() (str string, ok bool) {
 	if s.Len() != 0 {
-		for _, str = range s.Strings() {
-			s.Delete(str) // deletes only one value from the set and than exits
+		for str = range s.m {
+			s.lock.Lock()
+			delete(s.m, str)
+			s.lock.Unlock()
+			// s.Delete(str) // deletes only one value from the set and than exits
 			return str, true
 		}
 	}
@@ -142,7 +155,7 @@ func (s *StringSet) Intersect(other *StringSet) (intersection StringSet) {
 		}
 		smaller.Delete(element)
 	}
-	intersection = *smaller
+	intersection.m = smaller.m
 
 	return
 }
