@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-func ExampleDelete() {
+func Example_Delete() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	testSet.Delete("pluto")
@@ -47,7 +47,7 @@ func Example_Exists() {
 	// pippo exists
 }
 
-func ExampleStrings() {
+func Example_Strings() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 	slice := testSet.Strings()
 	sort.Strings(slice)
@@ -60,7 +60,7 @@ func ExampleStrings() {
 	// pluto
 }
 
-func ExampleStrings_2() {
+func Example_Strings_2() {
 	testSet := NewStringSet()
 	for _, element := range testSet.Strings() {
 		fmt.Println(element)
