@@ -3,6 +3,7 @@
 [![GoDoc](https://godoc.org/github.com/axamon/stringset?status.svg)](https://godoc.org/github.com/axamon/stringset)
 [![Build Status](https://travis-ci.org/axamon/stringset.svg?branch=master)](https://travis-ci.org/axamon/stringset)
 [![Go Report Card](https://goreportcard.com/badge/github.com/axamon/stringset)](https://goreportcard.com/report/github.com/axamon/stringset)
+[![codecov](https://codecov.io/gh/axamon/stringset/branch/master/graph/badge.svg)](https://codecov.io/gh/axamon/stringset)
 
 
 stringset creates sets for strings in golang that are concurrency safe
