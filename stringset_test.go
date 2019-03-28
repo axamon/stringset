@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-func Example_Delete() {
+func Example_stringset_Delete() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	testSet.Delete("pluto")
@@ -19,7 +19,7 @@ func Example_Delete() {
 	// pippo
 }
 
-func Example_Add() {
+func Example_stringset_Add() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	testSet.Add("pluto")
@@ -36,7 +36,7 @@ func Example_Add() {
 	// pluto
 }
 
-func Example_Exists() {
+func Example_stringset_Exists() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	element := "pippo"
@@ -47,7 +47,7 @@ func Example_Exists() {
 	// pippo exists
 }
 
-func Example_Strings() {
+func Example_stringset_Strings() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 	slice := testSet.Strings()
 	sort.Strings(slice)
@@ -60,7 +60,7 @@ func Example_Strings() {
 	// pluto
 }
 
-func Example_Strings_2() {
+func Example_stringset_Strings_2() {
 	testSet := NewStringSet()
 	for _, element := range testSet.Strings() {
 		fmt.Println(element)
@@ -69,7 +69,7 @@ func Example_Strings_2() {
 	//
 }
 
-func Example_Contains() {
+func Example_stringset_Contains() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 	testSet2 := NewStringSet("pippo", "pluto")
 
@@ -84,7 +84,7 @@ func Example_Contains() {
 	// No
 }
 
-func Example_Union() {
+func Example_stringset_Union() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 	testSet2 := NewStringSet("pippo", "pluto", "minnie")
 
@@ -104,7 +104,7 @@ func Example_Union() {
 	// pluto
 }
 
-func Example_Len() {
+func Example_stringset_Len() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 	testSet2 := NewStringSet("pippo", "pluto")
 	testSet3 := NewStringSet()
@@ -118,7 +118,7 @@ func Example_Len() {
 	// 0
 }
 
-func Example_Pop() {
+func Example_stringset_Pop() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	num := testSet.Len()
@@ -136,7 +136,7 @@ func Example_Pop() {
 	//  false
 }
 
-func Example_Difference() {
+func Example_stringset_Difference() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 	testSet2 := NewStringSet("paperino", "pluto")
 
