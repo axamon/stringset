@@ -117,3 +117,21 @@ func Example_Len() {
 	// 2
 	// 0
 }
+
+func Example_Pop() {
+	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+
+	num := testSet.Len()
+	for i := 0; i <= num; i++ { //testSet.Len() cannot be used in for loops
+		element, _ := testSet.Pop()
+		fmt.Println(element)
+	}
+	empty, ok := testSet.Pop()
+	fmt.Println(empty, ok)
+	// Unordered output:
+	// paperino
+	// pippo
+	// pluto
+	//
+	//  false
+}

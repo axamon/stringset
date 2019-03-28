@@ -1,2 +1,3 @@
-./examples
 coverage.txt
+examples/01/01
+examples/01/main.go
