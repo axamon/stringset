@@ -11,6 +11,10 @@ github.com/axamon/stringset/stringset.go:60.2,62.23 3 1
 github.com/axamon/stringset/stringset.go:65.2,66.12 2 1
 github.com/axamon/stringset/stringset.go:55.12,57.3 1 1
 github.com/axamon/stringset/stringset.go:62.23,64.3 1 1
+github.com/axamon/stringset/stringset.go:70.53,71.36 1 1
+github.com/axamon/stringset/stringset.go:76.2,76.13 1 1
+github.com/axamon/stringset/stringset.go:71.36,72.19 1 1
+github.com/axamon/stringset/stringset.go:72.19,74.4 1 1
 mode: set
 github.com/axamon/stringset/examples/01/main.go:13.13,27.2 7 0
 github.com/axamon/stringset/examples/01/main.go:29.50,32.28 2 0

@@ -65,3 +65,29 @@ func (s *StringSet) Strings() []string {
 	s.lock.Unlock()
 	return res
 }
+
+// Contains returns true if the given set contains all elements from the other set.
+func (s *StringSet) Contains(other *StringSet) bool {
+	for _, k := range other.Strings() {
+		if !s.Exists(k) {
+			return false
+		}
+	}
+	return true
+}
+
+// Union returns true if the given set contains all elements from the other set.
+func (s *StringSet) Union(other *StringSet) bool {
+	for _, k := range other.Strings() {
+		s.Add(k)
+	}
+	return true
+}
+
+// Len returns the number of items in the set.
+func (s *StringSet) Len() int {
+	s.lock.Lock()
+	n := len(s.m)
+	s.lock.Unlock()
+	return n
+}
