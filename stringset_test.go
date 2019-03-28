@@ -135,3 +135,14 @@ func Example_Pop() {
 	//
 	//  false
 }
+
+func Example_Difference() {
+	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+	testSet2 := NewStringSet("paperino", "pluto")
+
+	diff := testSet.Difference(testSet2)
+
+	fmt.Println(diff.Strings()[0])
+	// Output:
+	// pippo
+}
