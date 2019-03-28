@@ -118,7 +118,7 @@ func (s *StringSet) Difference(other *StringSet) (diff *StringSet) {
 }
 
 // Intersect returns a new set wich contains only the elemets shared by both input sets.
-func (s *StringSet) Intersect(other *StringSet) (intersection *StringSet) {
+func (s *StringSet) Intersect(other *StringSet) (intersection StringSet) {
 
 	slen := s.Len()
 	otherlen := other.Len()
@@ -142,6 +142,7 @@ func (s *StringSet) Intersect(other *StringSet) (intersection *StringSet) {
 		}
 		smaller.Delete(element)
 	}
+	intersection = *smaller
 
-	return smaller
+	return
 }
