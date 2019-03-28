@@ -88,16 +88,14 @@ func Example_stringset_Union() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
 	testSet2 := NewStringSet("pippo", "pluto", "minnie")
 
-	if ok := testSet.Union(testSet2); ok {
-		fmt.Println("Done")
-	}
-	slice := testSet.Strings()
-	sort.Strings(slice)
+	u := testSet.Union(testSet2)
+
+	slice := u.Strings()
+
 	for _, element := range slice {
 		fmt.Println(element)
 	}
-	// Output:
-	// Done
+	// Unordered output:
 	// minnie
 	// paperino
 	// pippo
@@ -145,4 +143,20 @@ func Example_stringset_Difference() {
 	fmt.Println(diff.Strings()[0])
 	// Output:
 	// pippo
+}
+
+func Example_stringset_Intersect() {
+	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
+	testSet2 := NewStringSet("paperino", "pluto", "nonna papera")
+
+	inersect := testSet.Intersect(testSet2)
+
+	list := inersect.Strings()
+
+	for _, element := range list {
+		fmt.Println(element)
+	}
+	// Unordered output:
+	// paperino
+	// pluto
 }
