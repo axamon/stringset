@@ -76,12 +76,14 @@ func (s *StringSet) Contains(other *StringSet) bool {
 	return true
 }
 
-// Union returns true if the given set contains all elements from the other set.
-func (s *StringSet) Union(other *StringSet) bool {
-	for _, k := range other.Strings() {
-		s.Add(k)
+// Union returns a new set with contains all elements of the previous ones.
+func (s *StringSet) Union(other *StringSet) (union *StringSet) {
+	otherlist := other.Strings()
+	union = s
+	for _, k := range otherlist {
+		union.Add(k)
 	}
-	return true
+	return union
 }
 
 // Len returns the number of items in the set.
@@ -113,4 +115,33 @@ func (s *StringSet) Difference(other *StringSet) (diff *StringSet) {
 		diff.Delete(k)
 	}
 	return diff
+}
+
+// Intersect returns a new set wich contains only the elemets shared by both input sets.
+func (s *StringSet) Intersect(other *StringSet) (intersection *StringSet) {
+
+	slen := s.Len()
+	otherlen := other.Len()
+
+	var smaller, greater *StringSet
+	if slen > otherlen {
+		smaller = other
+		greater = s
+	}
+
+	if slen <= otherlen {
+		smaller = s
+		greater = other
+	}
+
+	smallerslice := smaller.Strings()
+
+	for _, element := range smallerslice {
+		if greater.Exists(element) {
+			continue
+		}
+		smaller.Delete(element)
+	}
+
+	return smaller
 }
