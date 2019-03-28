@@ -95,12 +95,22 @@ func (s *StringSet) Len() int {
 
 // Pop removes and returns an arbitrary element from the set and removes it from the
 // set. If the set was empty, this returns ("", false).
-func (s *StringSet) Pop() (k string, ok bool) {
+func (s *StringSet) Pop() (str string, ok bool) {
 	if s.Len() != 0 {
-		for _, k = range s.Strings() {
-			s.Delete(k) // deletes only one value from the set and than exits
-			return k, true
+		for _, str = range s.Strings() {
+			s.Delete(str) // deletes only one value from the set and than exits
+			return str, true
 		}
 	}
 	return "", false
+}
+
+// Difference returns a new set with all elements from the first set and no elements from the latter.
+func (s *StringSet) Difference(other *StringSet) (diff *StringSet) {
+	toremove := other.Strings()
+	diff = s
+	for _, k := range toremove {
+		diff.Delete(k)
+	}
+	return diff
 }
