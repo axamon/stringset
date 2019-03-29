@@ -1,15 +1,17 @@
-package stringset
+package stringset_test
 
 import (
 	"fmt"
 	"sort"
 	"testing"
+
+	"github.com/axamon/stringset"
 )
 
-var tt = NewStringSet()
+var tt = stringset.NewStringSet()
 
 func BenchmarkT(b *testing.B) {
-	var t = NewStringSet()
+	var t = stringset.NewStringSet()
 	for n := 0; n < b.N; n++ {
 		go t.Add("pippo")
 		go t.Add("pluto")
@@ -33,8 +35,8 @@ func BenchmarkDelete(b *testing.B) {
 }
 
 func BenchmarkIntersect(b *testing.B) {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
-	testSet2 := NewStringSet("paperino", "pluto", "nonna papera")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
+	testSet2 := stringset.NewStringSet("paperino", "pluto", "nonna papera")
 
 	for n := 0; n < b.N; n++ {
 
@@ -44,7 +46,7 @@ func BenchmarkIntersect(b *testing.B) {
 }
 
 func Example_stringset_Delete() {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	testSet.Delete("pluto")
 	slice := testSet.Strings()
@@ -58,7 +60,7 @@ func Example_stringset_Delete() {
 }
 
 func Example_stringset_Add() {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	testSet.Add("pluto")
 	testSet.Add("nonna papera")
@@ -75,7 +77,7 @@ func Example_stringset_Add() {
 }
 
 func Example_stringset_Exists() {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	element := "pippo"
 	if ok := testSet.Exists(element); ok {
@@ -86,7 +88,7 @@ func Example_stringset_Exists() {
 }
 
 func Example_stringset_Strings() {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 	slice := testSet.Strings()
 	sort.Strings(slice)
 	for _, element := range slice {
@@ -99,7 +101,7 @@ func Example_stringset_Strings() {
 }
 
 func Example_stringset_Strings_2() {
-	testSet := NewStringSet()
+	testSet := stringset.NewStringSet()
 	for _, element := range testSet.Strings() {
 		fmt.Println(element)
 	}
@@ -108,8 +110,8 @@ func Example_stringset_Strings_2() {
 }
 
 func Example_stringset_Contains() {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
-	testSet2 := NewStringSet("pippo", "pluto")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
+	testSet2 := stringset.NewStringSet("pippo", "pluto")
 
 	if ok := testSet.Contains(testSet2); ok {
 		fmt.Println("Yes")
@@ -123,8 +125,8 @@ func Example_stringset_Contains() {
 }
 
 func Example_stringset_Union() {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
-	testSet2 := NewStringSet("pippo", "pluto", "minnie")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
+	testSet2 := stringset.NewStringSet("pippo", "pluto", "minnie")
 
 	u := testSet.Union(testSet2)
 
@@ -141,9 +143,9 @@ func Example_stringset_Union() {
 }
 
 func Example_stringset_Len() {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
-	testSet2 := NewStringSet("pippo", "pluto")
-	testSet3 := NewStringSet()
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
+	testSet2 := stringset.NewStringSet("pippo", "pluto")
+	testSet3 := stringset.NewStringSet()
 
 	fmt.Println(testSet.Len())
 	fmt.Println(testSet2.Len())
@@ -155,7 +157,7 @@ func Example_stringset_Len() {
 }
 
 func Example_stringset_Pop() {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	num := testSet.Len()
 	for i := 0; i <= num; i++ { //testSet.Len() cannot be used in for loops
@@ -173,8 +175,8 @@ func Example_stringset_Pop() {
 }
 
 func Example_stringset_Difference() {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
-	testSet2 := NewStringSet("paperino", "pluto")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
+	testSet2 := stringset.NewStringSet("paperino", "pluto")
 
 	diff := testSet.Difference(testSet2)
 
@@ -184,8 +186,8 @@ func Example_stringset_Difference() {
 }
 
 func Example_stringset_Intersect() {
-	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
-	testSet2 := NewStringSet("paperino", "pluto", "nonna papera")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
+	testSet2 := stringset.NewStringSet("paperino", "pluto", "nonna papera")
 
 	inersect := testSet.Intersect(testSet2)
 
@@ -200,8 +202,8 @@ func Example_stringset_Intersect() {
 }
 
 func Example_stringset_Intersect_2() {
-	testSet := NewStringSet("paperino", "pluto", "nonna papera")
-	testSet2 := NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
+	testSet := stringset.NewStringSet("paperino", "pluto", "nonna papera")
+	testSet2 := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
 
 	inersect := testSet.Intersect(testSet2)
 
