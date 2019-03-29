@@ -12,11 +12,16 @@ var tt = stringset.NewStringSet()
 
 func BenchmarkT(b *testing.B) {
 	var t = stringset.NewStringSet()
+	var t1 = stringset.NewStringSet()
 	for n := 0; n < b.N; n++ {
 		go t.Add("pippo")
+		go t1.Add("pluto")
 		go t.Add("pluto")
+		go t1.Add("paperino")
 		go t.Len()
-		go t.Exists("pippo")
+		go t.Union(t1)
+		go t.Intersect(t1)
+		// go t.Exists("pippo")
 		go t.Delete("pippo")
 		go t.Pop()
 	}
@@ -41,6 +46,17 @@ func BenchmarkIntersect(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 
 		go testSet.Intersect(testSet2)
+
+	}
+}
+
+func BenchmarkUnion(b *testing.B) {
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie", "paperinik", "paperoga")
+	testSet2 := stringset.NewStringSet("paperino", "pluto", "nonna papera")
+
+	for n := 0; n < b.N; n++ {
+
+		go testSet.Union(testSet2)
 
 	}
 }
