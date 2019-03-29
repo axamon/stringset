@@ -3,7 +3,45 @@ package stringset
 import (
 	"fmt"
 	"sort"
+	"testing"
 )
+
+var tt = NewStringSet()
+
+func BenchmarkT(b *testing.B) {
+	var t = NewStringSet()
+	for n := 0; n < b.N; n++ {
+		go t.Add("pippo")
+		go t.Add("pluto")
+		go t.Len()
+		go t.Exists("pippo")
+		go t.Delete("pippo")
+		go t.Pop()
+	}
+}
+
+func BenchmarkAdd(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		go tt.Add("pippo")
+	}
+}
+
+func BenchmarkDelete(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		go tt.Delete("pippo")
+	}
+}
+
+func BenchmarkIntersect(b *testing.B) {
+	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
+	testSet2 := NewStringSet("paperino", "pluto", "nonna papera")
+
+	for n := 0; n < b.N; n++ {
+
+		go testSet.Intersect(testSet2)
+
+	}
+}
 
 func Example_stringset_Delete() {
 	testSet := NewStringSet("pippo", "pluto", "paperino", "pippo")
