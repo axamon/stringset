@@ -112,9 +112,9 @@ func (s *StringSet) Pop() (str string, ok bool) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	if len(s.m) != 0 {
+		// deletes only one value from the set and than exits
 		for str = range s.m {
 			delete(s.m, str)
-			// s.Delete(str) // deletes only one value from the set and than exits
 			return str, true
 		}
 	}
@@ -123,20 +123,37 @@ func (s *StringSet) Pop() (str string, ok bool) {
 
 // Difference returns a new set with all elements from the first set and no elements from the latter.
 func (s *StringSet) Difference(other *StringSet) (diff *StringSet) {
-	toremove := other.Strings()
-	diff = s
-	for _, k := range toremove {
-		diff.Delete(k)
+	ret := &StringSet{
+		m: map[string]struct{}{},
 	}
-	return diff
+	s.lock.Lock()
+	for str := range s.m {
+		ret.m[str] = struct{}{}
+	}
+	s.lock.Unlock()
+	other.lock.Lock()
+	for str := range other.m {
+		delete(ret.m, str)
+	}
+	other.lock.Unlock()
+	return ret
 }
 
 // Intersect returns a new set wich contains only the elemets shared by both input sets.
-func (s *StringSet) Intersect(other *StringSet) (intersection StringSet) {
+func (s *StringSet) Intersect(other *StringSet) (intersection *StringSet) {
+	ret := &StringSet{
+		m: map[string]struct{}{},
+	}
 
-	slen := s.Len()
-	otherlen := other.Len()
+	s.lock.Lock()
+	slen := len(s.m)
+	s.lock.Unlock()
 
+	other.lock.Lock()
+	otherlen := len(other.m)
+	other.lock.Unlock()
+
+	// Find which set is smaller // TODO: change with select case
 	var smaller, greater *StringSet
 	if slen > otherlen {
 		smaller = other
@@ -148,15 +165,19 @@ func (s *StringSet) Intersect(other *StringSet) (intersection StringSet) {
 		greater = other
 	}
 
-	smallerslice := smaller.Strings()
+	// Copy smaller set in ret
+	for str := range smaller.m {
+		ret.m[str] = struct{}{}
+	}
 
-	for _, element := range smallerslice {
+	for element := range smaller.m {
+		// If element in smaller exists also in greater moves along
 		if greater.Exists(element) {
 			continue
 		}
-		smaller.Delete(element)
+		// otherwise deletes it also from ret
+		ret.Delete(element)
 	}
-	intersection.m = smaller.m
 
-	return
+	return ret
 }
