@@ -45,7 +45,7 @@ func BenchmarkIntersect(b *testing.B) {
 	}
 }
 
-func Example_stringset_Delete() {
+func ExampleStringSet_Delete() {
 	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	testSet.Delete("pluto")
@@ -59,7 +59,7 @@ func Example_stringset_Delete() {
 	// pippo
 }
 
-func Example_stringset_Add() {
+func ExampleStringSet_Add() {
 	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	testSet.Add("pluto")
@@ -76,7 +76,7 @@ func Example_stringset_Add() {
 	// pluto
 }
 
-func Example_stringset_Exists() {
+func ExampleStringSet_Exists() {
 	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	element := "pippo"
@@ -87,7 +87,7 @@ func Example_stringset_Exists() {
 	// pippo exists
 }
 
-func Example_stringset_Strings() {
+func ExampleStringSet_Strings() {
 	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 	slice := testSet.Strings()
 	sort.Strings(slice)
@@ -100,7 +100,7 @@ func Example_stringset_Strings() {
 	// pluto
 }
 
-func Example_stringset_Strings_2() {
+func ExampleStringSet_Strings_second() {
 	testSet := stringset.NewStringSet()
 	for _, element := range testSet.Strings() {
 		fmt.Println(element)
@@ -109,7 +109,7 @@ func Example_stringset_Strings_2() {
 	//
 }
 
-func Example_stringset_Contains() {
+func ExampleStringSet_Contains() {
 	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 	testSet2 := stringset.NewStringSet("pippo", "pluto")
 
@@ -124,7 +124,7 @@ func Example_stringset_Contains() {
 	// No
 }
 
-func Example_stringset_Union() {
+func ExampleStringSet_Union() {
 	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 	testSet2 := stringset.NewStringSet("pippo", "pluto", "minnie")
 
@@ -142,7 +142,7 @@ func Example_stringset_Union() {
 	// pluto
 }
 
-func Example_stringset_Len() {
+func ExampleStringSet_Len() {
 	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 	testSet2 := stringset.NewStringSet("pippo", "pluto")
 	testSet3 := stringset.NewStringSet()
@@ -156,7 +156,7 @@ func Example_stringset_Len() {
 	// 0
 }
 
-func Example_stringset_Pop() {
+func ExampleStringSet_Pop() {
 	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 
 	num := testSet.Len()
@@ -174,7 +174,7 @@ func Example_stringset_Pop() {
 	//  false
 }
 
-func Example_stringset_Difference() {
+func ExampleStringSet_Difference() {
 	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo")
 	testSet2 := stringset.NewStringSet("paperino", "pluto")
 
@@ -185,7 +185,7 @@ func Example_stringset_Difference() {
 	// pippo
 }
 
-func Example_stringset_Intersect() {
+func ExampleStringSet_Intersect() {
 	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
 	testSet2 := stringset.NewStringSet("paperino", "pluto", "nonna papera")
 
@@ -201,7 +201,7 @@ func Example_stringset_Intersect() {
 	// pluto
 }
 
-func Example_stringset_Intersect_2() {
+func ExampleStringSet_Intersect_second() {
 	testSet := stringset.NewStringSet("paperino", "pluto", "nonna papera")
 	testSet2 := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
 
