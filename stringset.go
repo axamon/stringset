@@ -45,7 +45,6 @@ func (s *StringSet) Delete(str string) {
 	s.lock.Lock()
 	delete(s.m, str)
 	s.lock.Unlock()
-
 }
 
 // Strings returns a slice of strings in the set.
@@ -82,19 +81,24 @@ func (s *StringSet) Contains(other *StringSet) bool {
 }
 
 // Union returns a new set which contains all elements of the previous ones.
-func (s *StringSet) Union(other *StringSet) (union StringSet) {
+func (s *StringSet) Union(other *StringSet) (union *StringSet) {
+
+	ret := &StringSet{
+		m: map[string]struct{}{},
+	}
+	s.lock.Lock()
+	for str := range s.m {
+		ret.m[str] = struct{}{}
+	}
+	s.lock.Unlock()
 
 	other.lock.Lock()
-	defer other.lock.Unlock()
-
 	for str := range other.m {
-		s.lock.Lock()
-		s.m[str] = struct{}{}
-		s.lock.Unlock()
+		ret.m[str] = struct{}{}
 	}
-	union.m = s.m
+	other.lock.Unlock()
 
-	return
+	return ret
 }
 
 // Len returns the number of items in the set.
