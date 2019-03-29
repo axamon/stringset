@@ -28,8 +28,8 @@ func NewStringSet(strings ...string) *StringSet {
 // If string is already in the set, it has no effect.
 func (s *StringSet) Add(str string) {
 	s.lock.Lock()
-	defer s.lock.Unlock()
 	s.m[str] = struct{}{}
+	s.lock.Unlock()
 }
 
 // Exists checks if string exists in the set.
@@ -43,8 +43,9 @@ func (s *StringSet) Exists(str string) bool {
 // Delete removes a string from the set.
 func (s *StringSet) Delete(str string) {
 	s.lock.Lock()
-	defer s.lock.Unlock()
 	delete(s.m, str)
+	s.lock.Unlock()
+
 }
 
 // Strings returns a slice of strings in the set.
@@ -108,11 +109,11 @@ func (s *StringSet) Len() int {
 // Pop removes and returns an arbitrary element from the set and removes it from the
 // set. If the set was empty, this returns ("", false).
 func (s *StringSet) Pop() (str string, ok bool) {
-	if s.Len() != 0 {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+	if len(s.m) != 0 {
 		for str = range s.m {
-			s.lock.Lock()
 			delete(s.m, str)
-			s.lock.Unlock()
 			// s.Delete(str) // deletes only one value from the set and than exits
 			return str, true
 		}
