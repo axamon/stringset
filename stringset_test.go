@@ -35,7 +35,7 @@ func BenchmarkDelete(b *testing.B) {
 }
 
 func BenchmarkIntersect(b *testing.B) {
-	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie")
+	testSet := stringset.NewStringSet("pippo", "pluto", "paperino", "pippo", "poldo", "minnie", "paperinik", "paperoga")
 	testSet2 := stringset.NewStringSet("paperino", "pluto", "nonna papera")
 
 	for n := 0; n < b.N; n++ {
