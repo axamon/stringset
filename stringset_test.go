@@ -21,7 +21,7 @@ func BenchmarkT(b *testing.B) {
 		go t.Len()
 		go t.Union(t1)
 		go t.Intersect(t1)
-		// go t.Exists("pippo")
+		go t.Exists("pippo")
 		go t.Delete("pippo")
 		go t.Pop()
 	}
