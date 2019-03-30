@@ -149,49 +149,74 @@ func (s *StringSet) Difference(other *StringSet) (diff *StringSet) {
 
 // Intersect returns a new set which contains only the elemets shared by both input sets.
 func (s *StringSet) Intersect(other *StringSet) (intersection *StringSet) {
-	ret := &StringSet{
-		m: map[string]struct{}{},
-	}
-	/*
+	var ret *StringSet
+	var wg sync.WaitGroup
+
+	var slen, otherlen int
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
 		s.lock.Lock()
-		slen := len(s.m)
+		slen = len(s.m)
+		s.lock.Unlock()
+	}()
+	go func() {
+		defer wg.Done()
+		other.lock.Lock()
+		otherlen = len(other.m)
+		other.lock.Unlock()
+	}()
+	wg.Wait()
+
+	switch {
+	case slen >= otherlen:
+		ret = &StringSet{
+			m: make(map[string]struct{}, otherlen),
+		}
+		// Copy smaller set in ret
+		other.lock.Lock()
+		for str := range other.m {
+			ret.m[str] = struct{}{}
+		}
+		other.lock.Unlock()
+
+		s.lock.Lock()
+		defer s.lock.Unlock()
+		for element := range ret.m {
+			// If element in smaller exists also in greater moves along
+			if _, exists := s.m[element]; exists {
+				continue
+			}
+			// otherwise deletes it also from ret
+			ret.lock.Lock()
+			delete(ret.m, element)
+			ret.lock.Unlock()
+		}
+
+	case slen < otherlen:
+		ret = &StringSet{
+			m: make(map[string]struct{}, slen),
+		}
+		// Copy smaller set in ret
+		s.lock.Lock()
+		for str := range s.m {
+			ret.m[str] = struct{}{}
+		}
 		s.lock.Unlock()
 
 		other.lock.Lock()
-		otherlen := len(other.m)
-		other.lock.Unlock()
-
-		// Find which set is smaller // TODO: change with select case
-		var smaller, greater *StringSet
-		if slen > otherlen {
-			smaller = other
-			greater = s
+		defer other.lock.Unlock()
+		for element := range ret.m {
+			// If element in smaller exists also in greater moves along
+			if _, exists := other.m[element]; exists {
+				continue
+			}
+			// otherwise deletes it also from ret
+			ret.lock.Lock()
+			delete(ret.m, element)
+			ret.lock.Unlock()
 		}
 
-		if slen <= otherlen {
-			smaller = s
-			greater = other
-		}
-	*/
-	// Copy smaller set in ret
-	s.lock.Lock()
-	for str := range s.m {
-		ret.m[str] = struct{}{}
 	}
-	s.lock.Unlock()
-
-	other.lock.Lock()
-	defer other.lock.Unlock()
-	for element := range ret.m {
-		// If element in smaller exists also in greater moves along
-		if _, exists := other.m[element]; exists {
-			continue
-		}
-		// otherwise deletes it also from ret
-		ret.lock.Lock()
-		delete(ret.m, element)
-		ret.lock.Unlock()
-	}
-
 	return ret
 }
