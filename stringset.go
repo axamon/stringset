@@ -153,6 +153,33 @@ func (s *StringSet) Intersect(other *StringSet) (intersection *StringSet) {
 	var wg sync.WaitGroup
 
 	var slen, otherlen int
+
+	createIntersect := func(smallerlen int, smaller, greater *StringSet) (ret *StringSet) {
+		ret = &StringSet{
+			m: make(map[string]struct{}, smallerlen),
+		}
+		// Copy smaller set in ret
+		smaller.lock.Lock()
+		for str := range smaller.m {
+			ret.m[str] = struct{}{}
+		}
+		smaller.lock.Unlock()
+
+		greater.lock.Lock()
+		defer greater.lock.Unlock()
+		for element := range ret.m {
+			// If element in smaller exists also in greater moves along
+			if _, exists := greater.m[element]; exists {
+				continue
+			}
+			// otherwise deletes it also from ret
+			ret.lock.Lock()
+			delete(ret.m, element)
+			ret.lock.Unlock()
+		}
+		return ret
+	}
+
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
@@ -167,56 +194,12 @@ func (s *StringSet) Intersect(other *StringSet) (intersection *StringSet) {
 		other.lock.Unlock()
 	}()
 	wg.Wait()
-
 	switch {
 	case slen >= otherlen:
-		ret = &StringSet{
-			m: make(map[string]struct{}, otherlen),
-		}
-		// Copy smaller set in ret
-		other.lock.Lock()
-		for str := range other.m {
-			ret.m[str] = struct{}{}
-		}
-		other.lock.Unlock()
-
-		s.lock.Lock()
-		defer s.lock.Unlock()
-		for element := range ret.m {
-			// If element in smaller exists also in greater moves along
-			if _, exists := s.m[element]; exists {
-				continue
-			}
-			// otherwise deletes it also from ret
-			ret.lock.Lock()
-			delete(ret.m, element)
-			ret.lock.Unlock()
-		}
+		ret = createIntersect(otherlen, other, s)
 
 	case slen < otherlen:
-		ret = &StringSet{
-			m: make(map[string]struct{}, slen),
-		}
-		// Copy smaller set in ret
-		s.lock.Lock()
-		for str := range s.m {
-			ret.m[str] = struct{}{}
-		}
-		s.lock.Unlock()
-
-		other.lock.Lock()
-		defer other.lock.Unlock()
-		for element := range ret.m {
-			// If element in smaller exists also in greater moves along
-			if _, exists := other.m[element]; exists {
-				continue
-			}
-			// otherwise deletes it also from ret
-			ret.lock.Lock()
-			delete(ret.m, element)
-			ret.lock.Unlock()
-		}
-
+		ret = createIntersect(slen, s, other)
 	}
 	return ret
 }
