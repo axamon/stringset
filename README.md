@@ -39,4 +39,15 @@ func main() {
 }
 ```
 
+# Benchmarks
+
+BenchmarkAdd-16          	 3000000	       497 ns/op
+
+BenchmarkDelete-16       	 3000000	       539 ns/op
+
+BenchmarkIntersect-16    	 1000000	      2168 ns/op
+
+BenchmarkUnion-16        	 2000000	      1825 ns/op
+
+
 
