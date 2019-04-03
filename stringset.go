@@ -80,6 +80,23 @@ func (s *StringSet) Contains(other *StringSet) bool {
 	return true
 }
 
+// Unify returns the first set which contains all elements of the two sets.
+func (s *StringSet) Unify(other *StringSet) {
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		other.lock.Lock()
+		for str := range other.m {
+			s.lock.Lock()
+			s.m[str] = struct{}{}
+			s.lock.Unlock()
+		}
+		other.lock.Unlock()
+	}()
+	wg.Wait()
+}
+
 // Union returns a new set which contains all elements of the previous ones.
 func (s *StringSet) Union(other *StringSet) (union *StringSet) {
 	var slen, otherlen int
