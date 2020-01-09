@@ -13,6 +13,28 @@ type StringSet struct {
 	lock sync.RWMutex
 }
 
+// New creates a new instance of type *Stringset
+func New() *StringSet {
+	res := &StringSet{
+		m: map[string]struct{}{},
+	}
+
+	return res
+}
+
+// AddSlice adds the elements of the slice to the set.
+func (s *StringSet) AddSlice(slice []string) *StringSet {
+
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
+	for _, str := range slice {
+		s.m[str] = struct{}{}
+	}
+
+	return s
+}
+
 // NewStringSet creates a new set for strings.
 func NewStringSet(strings ...string) *StringSet {
 	res := &StringSet{

@@ -3,12 +3,38 @@ package stringset_test
 import (
 	"fmt"
 	"sort"
+	"reflect"
 	"testing"
 
 	"github.com/axamon/stringset"
 )
 
 var tt = stringset.NewStringSet()
+
+func ExampleStringSet_New() {
+
+	s := stringset.New() 
+
+	fmt.Println(reflect.TypeOf(s))
+	// Output:
+	// *stringset.StringSet
+
+}
+
+
+func ExampleStringSet_AddSlice() {
+	slice := []string{"pluto", "paperino", "pluto"}
+
+	s := stringset.New()
+	
+	s.AddSlice(slice)
+
+	
+
+	fmt.Println(s.Len())
+	// Output:
+	// 2
+}
 
 func BenchmarkT(b *testing.B) {
 	var t = stringset.NewStringSet()
