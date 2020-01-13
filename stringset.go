@@ -6,13 +6,6 @@ import (
 	"sync"
 )
 
-// StringSet is a set of unique strings.
-// The lock sync.RWMutex allows to solve concurrency issues
-type StringSet struct {
-	m    map[string]struct{}
-	lock sync.RWMutex
-}
-
 // New creates a new instance of type *Stringset
 func New() *StringSet {
 	res := &StringSet{
@@ -22,36 +15,18 @@ func New() *StringSet {
 	return res
 }
 
-// AddSlice adds the elements of the slice to the set.
-func (s *StringSet) AddSlice(slice []string) *StringSet {
-
-	s.lock.Lock()
-	defer s.lock.Unlock()
-
-	for _, str := range slice {
-		s.m[str] = struct{}{}
-	}
-
-	return s
-}
-
 // NewStringSet creates a new set for strings.
 func NewStringSet(strings ...string) *StringSet {
 	res := &StringSet{
 		m: map[string]struct{}{},
 	}
+	res.lock.Lock()
 	for _, s := range strings {
-		res.Add(s)
+		res.m[s] = struct{}{}
 	}
-	return res
-}
+	res.lock.Unlock()
 
-// Add adds a string to the set.
-// If string is already in the set, it has no effect.
-func (s *StringSet) Add(str string) {
-	s.lock.Lock()
-	s.m[str] = struct{}{}
-	s.lock.Unlock()
+	return res
 }
 
 // Exists checks if string exists in the set.
@@ -102,25 +77,8 @@ func (s *StringSet) Contains(other *StringSet) bool {
 	return true
 }
 
-// Unify returns the first set which contains all elements of the two sets.
-func (s *StringSet) Unify(other *StringSet) {
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		other.lock.Lock()
-		for str := range other.m {
-			s.lock.Lock()
-			s.m[str] = struct{}{}
-			s.lock.Unlock()
-		}
-		other.lock.Unlock()
-	}()
-	wg.Wait()
-}
-
 // Union returns a new set which contains all elements of the previous ones.
-func (s *StringSet) Union(other *StringSet) (union *StringSet) {
+func (s *StringSet) Union(other *StringSet) *StringSet {
 	var slen, otherlen int
 	var wg sync.WaitGroup
 	wg.Add(2)
@@ -178,92 +136,40 @@ func (s *StringSet) Len() int {
 	return n
 }
 
-// Pop removes and returns an arbitrary element from the set and removes it from the
-// set. If the set was empty, this returns ("", false).
-func (s *StringSet) Pop() (str string, ok bool) {
+// Pop returns and removes an arbitrary element from the set.
+// If the set is empty it returns "", false.
+func (s *StringSet) Pop() (string, bool) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
-	if len(s.m) != 0 {
+	var str string
+	switch len(s.m) {
+	case 0:
+		return "", false
+	default:
 		// deletes only one value from the set and than exits
 		for str = range s.m {
 			delete(s.m, str)
-			return str, true
+			break
 		}
 	}
-	return "", false
+	return str, true
 }
 
-// Difference returns a new set with all elements from the first set and no elements from the latter.
-func (s *StringSet) Difference(other *StringSet) (diff *StringSet) {
-	ret := &StringSet{
+// Difference returns a new set with all elements from the first set less
+// all elements from the second one.
+func (s *StringSet) Difference(other *StringSet) *StringSet {
+	diff := &StringSet{
 		m: map[string]struct{}{},
 	}
 	s.lock.Lock()
 	for str := range s.m {
-		ret.m[str] = struct{}{}
+		diff.m[str] = struct{}{}
 	}
 	s.lock.Unlock()
 	other.lock.Lock()
 	for str := range other.m {
-		delete(ret.m, str)
+		delete(diff.m, str)
 	}
 	other.lock.Unlock()
-	return ret
-}
-
-// Intersect returns a new set which contains only the elemets shared by both input sets.
-func (s *StringSet) Intersect(other *StringSet) (intersection *StringSet) {
-	var ret *StringSet
-	var wg sync.WaitGroup
-
-	var slen, otherlen int
-
-	createIntersect := func(smallerlen int, smaller, greater *StringSet) (ret *StringSet) {
-		ret = &StringSet{
-			m: make(map[string]struct{}, smallerlen),
-		}
-		// Copy smaller set in ret
-		smaller.lock.Lock()
-		for str := range smaller.m {
-			ret.m[str] = struct{}{}
-		}
-		smaller.lock.Unlock()
-
-		greater.lock.Lock()
-		defer greater.lock.Unlock()
-		for element := range ret.m {
-			// If element in smaller exists also in greater moves along
-			if _, exists := greater.m[element]; exists {
-				continue
-			}
-			// otherwise deletes it also from ret
-			ret.lock.Lock()
-			delete(ret.m, element)
-			ret.lock.Unlock()
-		}
-		return ret
-	}
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		s.lock.Lock()
-		slen = len(s.m)
-		s.lock.Unlock()
-	}()
-	go func() {
-		defer wg.Done()
-		other.lock.Lock()
-		otherlen = len(other.m)
-		other.lock.Unlock()
-	}()
-	wg.Wait()
-	switch {
-	case slen >= otherlen:
-		ret = createIntersect(otherlen, other, s)
-
-	case slen < otherlen:
-		ret = createIntersect(slen, s, other)
-	}
-	return ret
+	return diff
 }

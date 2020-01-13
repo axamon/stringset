@@ -2,8 +2,8 @@ package stringset_test
 
 import (
 	"fmt"
-	"sort"
 	"reflect"
+	"sort"
 	"testing"
 
 	"github.com/axamon/stringset"
@@ -11,9 +11,9 @@ import (
 
 var tt = stringset.NewStringSet()
 
-func ExampleStringSet_New() {
+func ExampleNew() {
 
-	s := stringset.New() 
+	s := stringset.New()
 
 	fmt.Println(reflect.TypeOf(s))
 	// Output:
@@ -21,15 +21,26 @@ func ExampleStringSet_New() {
 
 }
 
+func ExampleNewStringSet() {
+	s := stringset.NewStringSet("pippo", "pluto", "minnie")
+
+	slice := s.Strings()
+	sort.Strings(slice)
+	for _, element := range slice {
+		fmt.Println(element)
+	}
+	// Output:
+	// minnie
+	// pippo
+	// pluto
+}
 
 func ExampleStringSet_AddSlice() {
 	slice := []string{"pluto", "paperino", "pluto"}
 
 	s := stringset.New()
-	
-	s.AddSlice(slice)
 
-	
+	s.AddSlice(slice)
 
 	fmt.Println(s.Len())
 	// Output:
@@ -40,16 +51,16 @@ func BenchmarkT(b *testing.B) {
 	var t = stringset.NewStringSet()
 	var t1 = stringset.NewStringSet()
 	for n := 0; n < b.N; n++ {
-		go t.Add("pippo")
-		go t1.Add("pluto")
-		go t.Add("pluto")
-		go t1.Add("paperino")
-		go t.Len()
-		go t.Union(t1)
-		go t.Intersect(t1)
-		go t.Exists("pippo")
-		go t.Delete("pippo")
-		go t.Pop()
+		t.Add("pippo")
+		t1.Add("pluto")
+		t.Add("pluto")
+		t1.Add("paperino")
+		t.Len()
+		t.Union(t1)
+		t.Intersect(t1)
+		t.Exists("pippo")
+		t.Delete("pippo")
+		t.Pop()
 	}
 }
 
@@ -71,7 +82,7 @@ func BenchmarkIntersect(b *testing.B) {
 
 	for n := 0; n < b.N; n++ {
 
-		go testSet.Intersect(testSet2)
+		testSet.Intersect(testSet2)
 
 	}
 }
