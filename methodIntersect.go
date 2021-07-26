@@ -2,8 +2,8 @@ package stringset
 
 import "sync"
 
-// Intersect returns a new set which contains only the elemets shared
-// by both sets.
+// Intersect restituisce un nuovo *StringSet con solo gli elementi presenti
+// in entrambi s e other: s ∩ other
 func (s *StringSet) Intersect(other *StringSet) *StringSet {
 
 	var wg sync.WaitGroup
@@ -40,7 +40,7 @@ func createIntersect(smallerlen int, smaller, greater *StringSet) *StringSet {
 	ret := &StringSet{
 		m: make(map[string]struct{}, smallerlen),
 	}
-	// Copy smaller set in ret
+	// copia il set meno numeroso in ret
 	smaller.lock.Lock()
 	for str := range smaller.m {
 		ret.m[str] = struct{}{}
@@ -50,11 +50,11 @@ func createIntersect(smallerlen int, smaller, greater *StringSet) *StringSet {
 	greater.lock.Lock()
 	defer greater.lock.Unlock()
 	for element := range ret.m {
-		// If element in smaller exists also in greater moves along
+		// se l'elemento in smaller esiste anche in greater prosegue
 		if _, exists := greater.m[element]; exists {
 			continue
 		}
-		// otherwise deletes it also from ret
+		// altrimenti lo rimuove da ret.
 		ret.lock.Lock()
 		delete(ret.m, element)
 		ret.lock.Unlock()
